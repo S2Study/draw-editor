@@ -1,0 +1,50 @@
+{
+  "name": "@s2study/draw-editor",
+  "version": "0.1.0",
+  "description": "drawchat編集ライブラリ",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node_modules/.bin/typings install",
+    "compile": "node_modules/.bin/gulp compile",
+    "prepublish":"npm run compile"
+  },
+  "author": "Y.Saito , T.Suzuki",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/S2Study/draw-editor.git"
+  },
+  "keywords": [
+    "s2study"
+  ],
+  "bugs": {
+    "url": "https://github.com/S2Study/draw-editor/issues"
+  },
+  "homepage": "https://github.com/S2Study/draw-editor#readme",
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.13.2",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-3": "^6.11.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^3.0.0",
+    "install": "^0.8.1",
+    "merge2": "^1.0.2",
+    "mocha": "^3.0.2",
+    "power-assert": "^1.3.1",
+    "process": "^0.11.2",
+    "sinon": "^1.17.2",
+    "source-map-support": "^0.4.2",
+    "typescript": "^2.0.3",
+    "typings": "^1.3.2"
+  },
+  "dependencies": {
+    "@s2study/draw-api": "latest",
+    "@s2study/draw-updater": "latest",
+    "@s2study/draw-viewer": "latest",
+    "babel-runtime": "^6.11.6"
+  }
+}
