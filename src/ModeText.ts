@@ -1,33 +1,33 @@
-import DrawchatCanvas = drawchat.editor.DrawchatCanvas;
+import drawchat from "@s2study/draw-api";
+
+import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
 import TextTransaction = drawchat.updater.TextTransaction;
-import {EditorProperties} from "./EditorProperties";
 import DrawchatViewer = drawchat.viewer.DrawchatViewer;
-export class ModeText implements DrawchatCanvas{
+import {EditorProperties} from "./EditorProperties";
+export class ModeText implements DrawchatCanvas {
 
-	private viewer:DrawchatViewer;
-	private tran:TextTransaction;
-	private prop:EditorProperties;
+	private viewer: DrawchatViewer;
+	private tran: TextTransaction;
+	private prop: EditorProperties;
 
-	constructor(
-		viewer:DrawchatViewer,
-		tran:TextTransaction,
-		prop:EditorProperties
-	){
+	constructor(viewer: DrawchatViewer,
+				tran: TextTransaction,
+				prop: EditorProperties) {
 		this.viewer = viewer;
 		this.tran = tran;
 		this.prop = prop;
 		this.tran.setSavePoint();
 	}
 
-	private text:string;
+	private text: string;
 
-	private pointX:number;
-	private pointY:number;
-	private time:number;
-	private waiting:boolean;
+	private pointX: number;
+	private pointY: number;
+	private time: number;
+	private waiting: boolean;
 
 	touchStart(x: number, y: number): void {
-		if(!this.tran.isAlive()){
+		if (!this.tran.isAlive()) {
 			return;
 		}
 		this.pointX = x;
@@ -36,13 +36,13 @@ export class ModeText implements DrawchatCanvas{
 	}
 
 	touchMove(x: number, y: number): void {
-		if(!this.tran.isAlive()){
+		if (!this.tran.isAlive()) {
 			return;
 		}
 		this.pointX = x;
 		this.pointY = y;
 		let latest = new Date().getTime();
-		if((latest - this.time) < 50){
+		if ((latest - this.time) < 50) {
 			this.setWait();
 			return;
 		}
@@ -51,7 +51,7 @@ export class ModeText implements DrawchatCanvas{
 	}
 
 	touchEnd(x: number, y: number): void {
-		if(!this.tran.isAlive()){
+		if (!this.tran.isAlive()) {
 			return;
 		}
 		this.pointX = x;
@@ -59,25 +59,25 @@ export class ModeText implements DrawchatCanvas{
 		this.drawText();
 	}
 
-	setText(text:string):void {
-		if(!this.tran.isAlive()){
+	setText(text: string): void {
+		if (!this.tran.isAlive()) {
 			return;
 		}
 		this.text = text;
 		this.drawText();
 	}
 
-	private setWait():void {
+	private setWait(): void {
 		if (this.waiting) {
 			return;
 		}
 		this.waiting = true;
-		setTimeout(()=> {
-			if(!this.waiting){
+		setTimeout(() => {
+			if (!this.waiting) {
 				return;
 			}
 			this.waiting = false;
-			if(!this.tran.isAlive()){
+			if (!this.tran.isAlive()) {
 				return;
 			}
 			let now = new Date().getTime();
@@ -89,7 +89,7 @@ export class ModeText implements DrawchatCanvas{
 		}, 100);
 	}
 
-	private drawText():void{
+	private drawText(): void {
 		this.waiting = false;
 		this.viewer.stop();
 		try {
@@ -106,9 +106,9 @@ export class ModeText implements DrawchatCanvas{
 		}
 	}
 
-	backward():void {
+	backward(): void {
 	}
 
-	forward():void {
+	forward(): void {
 	}
 }

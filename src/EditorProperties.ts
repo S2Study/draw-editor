@@ -1,41 +1,43 @@
-import DrawchatEditorProperties = drawchat.editor.DrawchatEditorProperties;
+import drawchat from "@s2study/draw-api";
+
+import DrawchatEditorProperties = drawchat.editor.DrawEditorProperties;
 import Color = drawchat.editor.Color;
-export class EditorProperties implements DrawchatEditorProperties{
+export class EditorProperties implements DrawchatEditorProperties {
 
 	/**
 	 * 線の色
 	 */
-	color:Color;
+	color: Color;
 
 	/**
 	 * 線の太さ
 	 */
-	thickness:number;
+	thickness: number;
 
 	/**
 	 * フォントサイズ
 	 */
-	fontSize:number;
+	fontSize: number;
 
 	/**
 	 * フォントファミリー
 	 */
-	fontFamily:string;
+	fontFamily: string;
 
 	/**
 	 * フォントの太さ
 	 */
-	fontWeight:number;
+	fontWeight: number;
 
 	/**
 	 * フォントスタイル
 	 */
-	fontStyle:string;
+	fontStyle: string;
 
 	/**
 	 * アルファ値
 	 */
-	alpha:number;
+	alpha: number;
 
 	/**
 	 * パスの種別
@@ -45,55 +47,56 @@ export class EditorProperties implements DrawchatEditorProperties{
 	 * 3: lineTo
 	 * 4: bezierCurveTo
 	 */
-	pathType:number;
+	pathType: number;
 
-	constructor(){
+	constructor() {
 		this.color = new ColorImpl();
 		this.pathType = 0;
 		this.alpha = 1.0;
 		this.fontStyle = null;
 		this.fontWeight = 400;
-		this.fontFamily = 'sans-serif';
+		this.fontFamily = "sans-serif";
 		this.fontSize = 24;
 		this.thickness = 12;
 	}
 }
-class ColorImpl implements Color{
-	_r:number;
-	set r(val:number){
+class ColorImpl implements Color {
+	_r: number;
+	set r(val: number) {
 		this._r = ColorImpl.correctColor(val);
 	}
-	get r():number{
+
+	get r(): number {
 		return this._r;
 	}
 
-	_g:number;
-	set g(val:number){
+	_g: number;
+	set g(val: number) {
 		this._g = ColorImpl.correctColor(val);
 	}
-	get g():number{
+
+	get g(): number {
 		return this._g;
 	}
 
-	_b:number;
-	set b(val:number){
+	_b: number;
+	set b(val: number) {
 		this._b = ColorImpl.correctColor(val);
 	}
-	get b():number{
+
+	get b(): number {
 		return this._b;
 	}
 
-	constructor(
-		r:number = 0,
-		g:number = 0,
-		b:number = 0
-	){
+	constructor(r: number = 0,
+				g: number = 0,
+				b: number = 0) {
 		this.r = r;
 		this.g = g;
 		this.b = b;
 	}
 
-	static correctColor(color:number){
+	static correctColor(color: number) {
 		return !isNaN(color) || color < 0 ? 0 : (color > 255 ? 255 : color);
 	}
 }

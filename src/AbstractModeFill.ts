@@ -1,55 +1,57 @@
-import DrawchatCanvas = drawchat.editor.DrawchatCanvas;
+import drawchat from "@s2study/draw-api";
+
+import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
 import ClipTransaction = drawchat.updater.ClipTransaction;
 import DrawPathTransaction = drawchat.updater.DrawPathTransaction;
 import PathTransaction = drawchat.updater.PathTransaction;
+import DrawchatViewer = drawchat.viewer.DrawchatViewer;
 
 import {EditorProperties} from "./EditorProperties";
 import {PathDrawer} from "./PathDrawer";
 import {Point} from "./PointArray";
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
 export abstract class AbstractModeFill<T extends PathTransaction> implements DrawchatCanvas {
 
-	private viewer:DrawchatViewer;
-	private tran:T;
-	private pathDrawer:PathDrawer;
+	private viewer: DrawchatViewer;
+	private tran: T;
+	private pathDrawer: PathDrawer;
 
 	constructor(
-		viewer:DrawchatViewer,
-		tran:T,
-		prop:EditorProperties
-	){
+		viewer: DrawchatViewer,
+		tran: T,
+		prop: EditorProperties
+	) {
 		this.viewer = viewer;
 		this.tran = tran;
 		this.tran.setSavePoint();
-		this.pathDrawer = new PathDrawer(tran,prop);
+		this.pathDrawer = new PathDrawer(tran, prop);
 		this.lPointX = -100;
 		this.lPointY = -100;
 	}
 
-	private time:number;
+	private time: number;
 
-	lPointX:number;
-	lPointY:number;
+	lPointX: number;
+	lPointY: number;
 
-	private wPointX:number;
-	private wPointY:number;
-	private waiting:boolean;
+	private wPointX: number;
+	private wPointY: number;
+	private waiting: boolean;
 
 
 	touchStart(x: number, y: number): void {
-		this.touchMove(x,y);
+		this.touchMove(x, y);
 	}
 
 	touchMove(x: number, y: number): void {
-		if(!this.tran.isAlive()){
+		if (!this.tran.isAlive()) {
 			return;
 		}
 		let latest = this.time;
 		this.time = new Date().getTime();
 
-		if((this.time - latest) >= 50){
+		if ((this.time - latest) >= 50) {
 			// this.tran.restoreSavePoint();
-			this.doFill(x,y);
+			this.doFill(x, y);
 			return;
 		}
 
@@ -57,30 +59,30 @@ export abstract class AbstractModeFill<T extends PathTransaction> implements Dra
 		let y1 = y - this.lPointY;
 
 		let d = Math.sqrt(x1 * x1 + y1 * y1);
-		if(d < 5){
+		if (d < 5) {
 			this.wPointX = x;
 			this.wPointY = y;
 			this.setWait();
 			return;
 		}
-		this.doFill(x,y);
+		this.doFill(x, y);
 	}
 
 	touchEnd(x: number, y: number): void {
-		this.touchMove(x,y);
+		this.touchMove(x, y);
 	}
 
-	private setWait():void {
+	private setWait(): void {
 		if (this.waiting) {
 			return;
 		}
 		this.waiting = true;
-		setTimeout(()=> {
-			if(!this.waiting){
+		setTimeout(() => {
+			if (!this.waiting) {
 				return;
 			}
 			this.waiting = false;
-			if(!this.tran.isAlive()){
+			if (!this.tran.isAlive()) {
 				return;
 			}
 			let now = new Date().getTime();
@@ -88,11 +90,11 @@ export abstract class AbstractModeFill<T extends PathTransaction> implements Dra
 				this.setWait();
 				return;
 			}
-			this.doFill(this.wPointX,this.wPointY);
+			this.doFill(this.wPointX, this.wPointY);
 		}, 100);
 	}
 
-	private doFill(x:number,y:number):void{
+	private doFill(x: number, y: number): void {
 		this.waiting = false;
 		this.lPointX = x;
 		this.lPointY = y;
@@ -112,22 +114,22 @@ export abstract class AbstractModeFill<T extends PathTransaction> implements Dra
 		}
 	}
 
-	protected abstract setProperty(tran:T):void;
+	protected abstract setProperty(tran: T): void;
 
-	setText(text:string):void {
-		//処理なし。
+	setText(text: string): void {
+		// 処理なし。
 	}
 
-	backward():void {
+	backward(): void {
 		this.pathDrawer.pop();
-		let point:Point = this.pathDrawer.pop();
-		if(point != null){
+		let point: Point = this.pathDrawer.pop();
+		if (point != null) {
 			point = {
-				x:-100,
-				y:-100
+				x: -100,
+				y: -100
 			};
 		}
-		this.doFill(point.x,point.y);
+		this.doFill(point.x, point.y);
 	}
 }
 

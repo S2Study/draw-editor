@@ -1,9 +1,11 @@
-import DrawchatEditor = drawchat.editor.DrawchatEditor;
-import DrawchatEditorProperties = drawchat.editor.DrawchatEditorProperties;
-import DrawchatCanvas = drawchat.editor.DrawchatCanvas;
-import DrawchatModeChanger = drawchat.editor.DrawchatModeChanger;
+import drawchat from "@s2study/draw-api";
+
+import DrawchatEditor = drawchat.editor.DrawEditor;
+import DrawchatEditorProperties = drawchat.editor.DrawEditorProperties;
+import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
+import DrawchatModeChanger = drawchat.editor.DrawEditorModeChanger;
 import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
-import DrawHistory = drawchat.core.DrawHistory;
+import DrawHistory = drawchat.history.DrawHistory;
 import UpdateListener = drawchat.editor.UpdateListener;
 import DrawchatRenderer = drawchat.renderer.DrawchatRenderer;
 import DrawchatViewer = drawchat.viewer.DrawchatViewer;
@@ -12,54 +14,52 @@ import {Changer} from "./Changer";
 import Updater from "@s2study/draw-updater";
 import Viewer from "@s2study/draw-viewer";
 import {EditorProperties} from "./EditorProperties";
-export class Editor implements DrawchatEditor{
+export class Editor implements DrawchatEditor {
 
 	/**
 	 * 設定値
 	 */
-	_properties:DrawchatEditorProperties;
+	_properties: DrawchatEditorProperties;
 
 	/**
 	 * モードチェンジャー
 	 */
-	_mode:Changer;
+	_mode: Changer;
 
-	layers:Layers;
+	layers: Layers;
 
-	private listeners:Set<UpdateListener>;
+	private listeners: Set<UpdateListener>;
 
-	private history:DrawHistory;
+	private history: DrawHistory;
 
-	private updater:DrawchatUpdater;
+	private updater: DrawchatUpdater;
 
-	private renderer:DrawchatRenderer;
+	private renderer: DrawchatRenderer;
 
-	private viewer:DrawchatViewer;
+	private viewer: DrawchatViewer;
 
-	constructor(
-		history:DrawHistory,
-		renderer:DrawchatRenderer,
-		properties?:DrawchatEditorProperties
-	){
+	constructor(history: DrawHistory,
+				renderer: DrawchatRenderer,
+				properties?: DrawchatEditorProperties) {
 		this.listeners = new Set<UpdateListener>();
 		this.history = history;
 		this.updater = Updater.createInstance(history);
 		this.renderer = renderer;
-		this.viewer = Viewer.createInstance(history,renderer);
-		this.layers = new Layers(this.updater,this.viewer,this);
+		this.viewer = Viewer.createInstance(history, renderer);
+		this.layers = new Layers(this.updater, this.viewer, this);
 		this._properties = properties ? properties : new EditorProperties();
-		this._mode = new Changer(this.layers,this._properties);
+		this._mode = new Changer(this.layers, this._properties);
 	}
 
-	get properties():DrawchatEditorProperties{
+	get properties(): DrawchatEditorProperties {
 		return this._properties;
 	}
 
-	get canvas():DrawchatCanvas{
+	get canvas(): DrawchatCanvas {
 		return this._mode.canvas;
 	}
 
-	get mode():DrawchatModeChanger{
+	get mode(): DrawchatModeChanger {
 		return this._mode;
 	}
 
@@ -71,24 +71,24 @@ export class Editor implements DrawchatEditor{
 		this.viewer.start();
 	}
 
-	getWidth():number {
+	getWidth(): number {
 		return this.renderer.width;
 	}
 
-	getHeight():number {
+	getHeight(): number {
 		return this.renderer.height;
 	}
 
-	undo():Promise<any> {
+	undo(): Promise<any> {
 		let mode = this.mode.getMode();
-		return this.updater.undo().then(()=>{
+		return this.updater.undo().then(() => {
 			return this.mode.changeMode(mode);
 		});
 	}
 
-	redo():Promise<any> {
+	redo(): Promise<any> {
 		let mode = this.mode.getMode();
-		return this.updater.redo().then(()=>{
+		return this.updater.redo().then(() => {
 			return this.mode.changeMode(mode);
 		});
 	}
@@ -113,17 +113,17 @@ export class Editor implements DrawchatEditor{
 		this.listeners.add(listener);
 	}
 
-	private setupListener():void{
-		this.history.awaitUpdate(()=>{
-			let deleteList:UpdateListener[] = [];
-			for(let listener of this.listeners.values()){
+	private setupListener(): void {
+		this.history.awaitUpdate(() => {
+			let deleteList: UpdateListener[] = [];
+			for (let listener of this.listeners.values()) {
 				try {
 					listener();
 				} catch (e) {
 					deleteList.push(listener);
 				}
 			}
-			for(let target of deleteList){
+			for (let target of deleteList) {
 				this.listeners.delete(target);
 			}
 			this.setupListener();
