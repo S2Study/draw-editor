@@ -1,6 +1,6 @@
 {
   "name": "@s2study/draw-editor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "drawchat編集ライブラリ",
   "main": "index.js",
   "scripts": {
@@ -43,8 +43,10 @@
   },
   "dependencies": {
     "@s2study/draw-api": "^0.1.0",
-    "@s2study/draw-updater": "0.1.4",
-    "@s2study/draw-viewer": "0.1.4",
-    "babel-runtime": "^6.11.6"
+    "@s2study/draw-updater": "0.1.5",
+    "@s2study/draw-viewer": "0.1.5",
+    "@types/eventemitter3": "^1.1.29",
+    "babel-runtime": "^6.11.6",
+    "eventemitter3": "^2.0.1"
   }
 }

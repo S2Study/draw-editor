@@ -1,4 +1,4 @@
-import drawchat from "@s2study/draw-api";
+import * as drawchat from "@s2study/draw-api";
 
 import DrawchatEditor = drawchat.editor.DrawEditor;
 import DrawchatEditorProperties = drawchat.editor.DrawEditorProperties;
@@ -29,18 +29,16 @@ export class Editor implements DrawchatEditor {
 	layers: Layers;
 
 	private listeners: Set<UpdateListener>;
-
 	private history: DrawHistory;
-
 	private updater: DrawchatUpdater;
-
 	private renderer: DrawchatRenderer;
-
 	private viewer: DrawchatViewer;
 
-	constructor(history: DrawHistory,
-				renderer: DrawchatRenderer,
-				properties?: DrawchatEditorProperties) {
+	constructor(
+		history: DrawHistory,
+		renderer: DrawchatRenderer,
+		properties?: DrawchatEditorProperties
+	) {
 		this.listeners = new Set<UpdateListener>();
 		this.history = history;
 		this.updater = Updater.createInstance(history);

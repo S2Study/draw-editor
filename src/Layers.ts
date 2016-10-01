@@ -1,4 +1,4 @@
-import drawchat from "@s2study/draw-api";
+import * as drawchat from "@s2study/draw-api";
 
 import DrawchatLayers = drawchat.editor.DrawEditorLayers;
 import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
@@ -12,9 +12,11 @@ export class Layers implements DrawchatLayers {
 	editor: DrawchatEditor;
 	currentId: string;
 
-	constructor(updater: DrawchatUpdater,
-				viewer: DrawchatViewer,
-				editor: DrawchatEditor) {
+	constructor(
+		updater: DrawchatUpdater,
+		viewer: DrawchatViewer,
+		editor: DrawchatEditor
+	) {
 		this.updater = updater;
 		this.viewer = viewer;
 		this.editor = editor;

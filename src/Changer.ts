@@ -1,4 +1,4 @@
-import drawchat from "@s2study/draw-api";
+import * as drawchat from "@s2study/draw-api";
 
 import DrawchatModeChanger = drawchat.editor.DrawEditorModeChanger;
 import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
