@@ -14,6 +14,7 @@ import {ModeText} from "./ModeText";
 import {ModeHandTool} from "./ModeHandTool";
 import {ModeEyedropper} from "./ModeEyedropper";
 import {ModeChanging} from "./ModeChanging";
+import {EditorEventDispatchers} from "./EditorEventDispatchers";
 export class Changer implements DrawchatModeChanger {
 
 	private static EMPTY_CANVAS = new ModeChanging();
@@ -82,9 +83,15 @@ export class Changer implements DrawchatModeChanger {
 
 	private viewer: DrawchatViewer;
 
-	constructor(layers: Layers,
-				prop: EditorProperties) {
+	private dispatcher: EditorEventDispatchers;
+
+	constructor(
+		layers: Layers,
+		prop: EditorProperties,
+		dispatcher: EditorEventDispatchers
+	) {
 		this.updater = layers.updater;
+		this.dispatcher = dispatcher;
 		this.prop = prop;
 		this.viewer = layers.viewer;
 		this.layers = layers;
@@ -106,6 +113,7 @@ export class Changer implements DrawchatModeChanger {
 		this.mode = this.CHANGING;
 		this.reservedMode = mode;
 		this.canvas = Changer.EMPTY_CANVAS;
+		this.dispatcher.changeMode.dispatch(this.mode);
 		let currentId = this.layers.currentId;
 
 		switch (mode) {
@@ -170,6 +178,7 @@ export class Changer implements DrawchatModeChanger {
 		}
 		this.mode = mode;
 		this.canvas = canvas;
+		this.dispatcher.changeMode.dispatch(this.mode);
 		return this.canvas;
 	}
 

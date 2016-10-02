@@ -1,25 +1,30 @@
-import * as drawchat from "@s2study/draw-api";
+import * as api from "@s2study/draw-api";
 
-import DrawchatEditor = drawchat.editor.DrawEditor;
-import DrawchatEditorProperties = drawchat.editor.DrawEditorProperties;
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import DrawchatModeChanger = drawchat.editor.DrawEditorModeChanger;
-import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
-import DrawHistory = drawchat.history.DrawHistory;
-import UpdateListener = drawchat.editor.UpdateListener;
-import DrawchatRenderer = drawchat.renderer.DrawchatRenderer;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
+import DrawchatEditor = api.editor.DrawEditor;
+import DrawchatEditorProperties = api.editor.DrawEditorProperties;
+import DrawchatCanvas = api.editor.DrawEditorCanvas;
+import DrawchatModeChanger = api.editor.DrawEditorModeChanger;
+import DrawchatUpdater = api.updater.DrawchatUpdater;
+import DrawHistory = api.history.DrawHistory;
+import UpdateListener = api.editor.UpdateListener;
+import DrawchatRenderer = api.renderer.DrawchatRenderer;
+import DrawchatViewer = api.viewer.DrawchatViewer;
+import DrawEditorEventListeners = api.editor.DrawEditorEventListeners;
+
+import * as emitter from "eventemitter3";
 import {Layers} from "./Layers";
 import {Changer} from "./Changer";
 import Updater from "@s2study/draw-updater";
 import Viewer from "@s2study/draw-viewer";
 import {EditorProperties} from "./EditorProperties";
+import {EditorEventListeners} from "./EditorEventListeners";
+import {EditorEventDispatchers} from "./EditorEventDispatchers";
 export class Editor implements DrawchatEditor {
 
 	/**
 	 * 設定値
 	 */
-	_properties: DrawchatEditorProperties;
+	_properties: EditorProperties;
 
 	/**
 	 * モードチェンジャー
@@ -28,25 +33,40 @@ export class Editor implements DrawchatEditor {
 
 	layers: Layers;
 
-	private listeners: Set<UpdateListener>;
+	// private listeners: Set<UpdateListener>;
 	private history: DrawHistory;
 	private updater: DrawchatUpdater;
 	private renderer: DrawchatRenderer;
 	private viewer: DrawchatViewer;
+	private _listeners: EditorEventListeners;
+	private _dispatchers: EditorEventDispatchers;
 
 	constructor(
 		history: DrawHistory,
 		renderer: DrawchatRenderer,
 		properties?: DrawchatEditorProperties
 	) {
-		this.listeners = new Set<UpdateListener>();
+		// this.listeners = new Set<UpdateListener>();
 		this.history = history;
 		this.updater = Updater.createInstance(history);
 		this.renderer = renderer;
 		this.viewer = Viewer.createInstance(history, renderer);
-		this.layers = new Layers(this.updater, this.viewer, this);
-		this._properties = properties ? properties : new EditorProperties();
-		this._mode = new Changer(this.layers, this._properties);
+		this.layers = new Layers(
+			this.updater, this.viewer, this, this._dispatchers
+		);
+		this._properties = new EditorProperties(
+			this._dispatchers, properties
+		);
+
+		this._mode = new Changer(
+			this.layers,
+			this._properties,
+			this._dispatchers
+		);
+
+		const emitter3 = new emitter.EventEmitter();
+		this._listeners = new EditorEventListeners(emitter3);
+		this._dispatchers = new EditorEventDispatchers(emitter3);
 	}
 
 	get properties(): DrawchatEditorProperties {
@@ -59,6 +79,14 @@ export class Editor implements DrawchatEditor {
 
 	get mode(): DrawchatModeChanger {
 		return this._mode;
+	}
+
+	get events(): DrawEditorEventListeners {
+		return this._listeners;
+	}
+
+	get dispatchers(): EditorEventDispatchers {
+		return this._dispatchers;
 	}
 
 	stop(): void {
@@ -102,27 +130,12 @@ export class Editor implements DrawchatEditor {
 	reRender(): void {
 		this.viewer.refresh();
 	}
-
-	off(listener: drawchat.editor.UpdateListener): void {
-		this.listeners.delete(listener);
-	}
-
-	on(listener: drawchat.editor.UpdateListener): void {
-		this.listeners.add(listener);
-	}
-
 	private setupListener(): void {
 		this.history.awaitUpdate(() => {
-			let deleteList: UpdateListener[] = [];
-			for (let listener of this.listeners.values()) {
-				try {
-					listener();
-				} catch (e) {
-					deleteList.push(listener);
-				}
-			}
-			for (let target of deleteList) {
-				this.listeners.delete(target);
+			try {
+				this._dispatchers.update.dispatch(null);
+			} catch (e) {
+				console.warn(e);
 			}
 			this.setupListener();
 		});
