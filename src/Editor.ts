@@ -10,6 +10,7 @@ import UpdateListener = api.editor.UpdateListener;
 import DrawchatRenderer = api.renderer.DrawchatRenderer;
 import DrawchatViewer = api.viewer.DrawchatViewer;
 import DrawEditorEventListeners = api.editor.DrawEditorEventListeners;
+import Message = api.structures.Message;
 
 import * as emitter from "eventemitter3";
 import {Layers} from "./Layers";
@@ -51,6 +52,8 @@ export class Editor implements DrawchatEditor {
 		this.updater = Updater.createInstance(history);
 		this.renderer = renderer;
 		this.viewer = Viewer.createInstance(history, renderer);
+		const emitter3 = new emitter.EventEmitter();
+		this._dispatchers = new EditorEventDispatchers(emitter3);
 		this.layers = new Layers(
 			this.updater, this.viewer, this, this._dispatchers
 		);
@@ -64,9 +67,7 @@ export class Editor implements DrawchatEditor {
 			this._dispatchers
 		);
 
-		const emitter3 = new emitter.EventEmitter();
 		this._listeners = new EditorEventListeners(emitter3);
-		this._dispatchers = new EditorEventDispatchers(emitter3);
 	}
 
 	get properties(): DrawchatEditorProperties {
@@ -139,5 +140,13 @@ export class Editor implements DrawchatEditor {
 			}
 			this.setupListener();
 		});
+	}
+
+	createImageURI(): Promise<string> {
+		return Promise.resolve(this.viewer.createImageDataURI());
+	}
+
+	generateMessage(): Promise<Message> {
+		return Promise.resolve(this.history.generateMessage());
 	}
 }
