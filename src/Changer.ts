@@ -1,5 +1,3 @@
-import * as drawchat from "@s2study/draw-api";
-
 import {Layers} from "./Layers";
 import {ModeEraser} from "./ModeEraser";
 import {EditorProperties} from "./EditorProperties";
@@ -14,6 +12,7 @@ import {EditorEventDispatchers} from "./EditorEventDispatchers";
 import {Updater} from "@s2study/draw-updater/lib/Updator";
 import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
 import {DrawchatCanvas} from "./index";
+
 export class Changer {
 
 	private static EMPTY_CANVAS = new ModeChanging();
