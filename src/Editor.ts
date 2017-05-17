@@ -1,26 +1,23 @@
 import * as api from "@s2study/draw-api";
 
-import DrawchatEditor = api.editor.DrawEditor;
-import DrawchatEditorProperties = api.editor.DrawEditorProperties;
-import DrawchatCanvas = api.editor.DrawEditorCanvas;
-import DrawchatModeChanger = api.editor.DrawEditorModeChanger;
-import DrawchatUpdater = api.updater.DrawchatUpdater;
 import DrawHistory = api.history.DrawHistory;
-import UpdateListener = api.editor.UpdateListener;
 import DrawchatRenderer = api.renderer.DrawchatRenderer;
-import DrawchatViewer = api.viewer.DrawchatViewer;
-import DrawEditorEventListeners = api.editor.DrawEditorEventListeners;
 import Message = api.structures.Message;
 
 import * as emitter from "eventemitter3";
 import {Layers} from "./Layers";
 import {Changer} from "./Changer";
-import Updater from "@s2study/draw-updater";
-import Viewer from "@s2study/draw-viewer";
+import {Updater} from "@s2study/draw-updater/lib/Updator";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+import updaters from "@s2study/draw-updater";
+import viewers from "@s2study/draw-viewer";
+
 import {EditorProperties} from "./EditorProperties";
 import {EditorEventListeners} from "./EditorEventListeners";
 import {EditorEventDispatchers} from "./EditorEventDispatchers";
-export class Editor implements DrawchatEditor {
+import {DrawchatCanvas} from "./index";
+
+export class Editor {
 
 	/**
 	 * 設定値
@@ -34,24 +31,22 @@ export class Editor implements DrawchatEditor {
 
 	layers: Layers;
 
-	// private listeners: Set<UpdateListener>;
 	private history: DrawHistory;
-	private updater: DrawchatUpdater;
+	private updater: Updater;
 	private renderer: DrawchatRenderer;
-	private viewer: DrawchatViewer;
+	private viewer: DrawViewer;
 	private _listeners: EditorEventListeners;
 	private _dispatchers: EditorEventDispatchers;
 
 	constructor(
 		history: DrawHistory,
 		renderer: DrawchatRenderer,
-		properties?: DrawchatEditorProperties
+		properties?: EditorProperties
 	) {
-		// this.listeners = new Set<UpdateListener>();
 		this.history = history;
-		this.updater = Updater.createInstance(history);
+		this.updater = updaters.createInstance(history);
 		this.renderer = renderer;
-		this.viewer = Viewer.createInstance(history, renderer);
+		this.viewer = viewers.createInstance(history, renderer);
 		const emitter3 = new emitter.EventEmitter();
 		this._dispatchers = new EditorEventDispatchers(emitter3);
 		this.layers = new Layers(
@@ -70,7 +65,7 @@ export class Editor implements DrawchatEditor {
 		this._listeners = new EditorEventListeners(emitter3);
 	}
 
-	get properties(): DrawchatEditorProperties {
+	get properties(): EditorProperties {
 		return this._properties;
 	}
 
@@ -78,11 +73,11 @@ export class Editor implements DrawchatEditor {
 		return this._mode.canvas;
 	}
 
-	get mode(): DrawchatModeChanger {
+	get mode(): Changer {
 		return this._mode;
 	}
 
-	get events(): DrawEditorEventListeners {
+	get events(): EditorEventListeners {
 		return this._listeners;
 	}
 

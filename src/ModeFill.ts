@@ -1,25 +1,22 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import ClipTransaction = drawchat.updater.ClipTransaction;
-import DrawPathTransaction = drawchat.updater.DrawPathTransaction;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
-
 import {EditorProperties} from "./EditorProperties";
 import {AbstractModeFill} from "./AbstractModeFill";
-export class ModeFill extends AbstractModeFill<DrawPathTransaction> {
+import {PathTransaction} from "@s2study/draw-updater/lib/PathTransaction";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+export class ModeFill extends AbstractModeFill<PathTransaction> {
 
 	private prop: EditorProperties;
 
-	constructor(viewer: DrawchatViewer,
-				tran: DrawPathTransaction,
-				prop: EditorProperties) {
+	constructor(
+		viewer: DrawViewer,
+		tran: PathTransaction,
+		prop: EditorProperties
+	) {
 		super(viewer, tran, prop);
 		this.prop = prop;
 	}
 
-	protected setProperty(tran: drawchat.updater.DrawPathTransaction): void {
-		tran.setFill(`rgba(${this.prop.color.r},${this.prop.color.g},${this.prop.color.b},${this.prop.alpha})`);
+	protected setProperty(tran: PathTransaction): void {
+		tran.setFill(this.prop.color.getAlphaNumber(this.prop.alpha));
 	}
 
 	setText(text: string): void {

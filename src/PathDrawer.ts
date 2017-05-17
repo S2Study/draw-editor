@@ -1,11 +1,7 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import ClipTransaction = drawchat.updater.ClipTransaction;
-import PathTransaction = drawchat.updater.PathTransaction;
 import {EditorProperties} from "./EditorProperties";
 import {SplinePlotter} from "./SplinePlotter";
 import {Point} from "./PointArray";
+import {IPathTransaction} from "@s2study/draw-updater/lib";
 export class PathDrawer {
 
 	/**
@@ -13,11 +9,13 @@ export class PathDrawer {
 	 */
 	private static SPLINE: SplinePlotter = new SplinePlotter();
 
-	private tran: PathTransaction;
+	private tran: IPathTransaction;
 	private prop: EditorProperties;
 
-	constructor(tran: PathTransaction,
-				prop: EditorProperties) {
+	constructor(
+		tran: IPathTransaction,
+		prop: EditorProperties
+	) {
 		this.tran = tran;
 		// this.tran.setSavePoint();
 		this.prop = prop;
@@ -26,7 +24,7 @@ export class PathDrawer {
 		}
 	}
 
-	pop(): Point {
+	pop(): Point | null {
 		if (this.tran.isAlive()) {
 			PathDrawer.SPLINE.inputList.init();
 		}

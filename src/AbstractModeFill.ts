@@ -1,22 +1,16 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import ClipTransaction = drawchat.updater.ClipTransaction;
-import DrawPathTransaction = drawchat.updater.DrawPathTransaction;
-import PathTransaction = drawchat.updater.PathTransaction;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
-
 import {EditorProperties} from "./EditorProperties";
 import {PathDrawer} from "./PathDrawer";
-import {Point} from "./PointArray";
-export abstract class AbstractModeFill<T extends PathTransaction> implements DrawchatCanvas {
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+import {IPathTransaction} from "@s2study/draw-updater/lib";
 
-	private viewer: DrawchatViewer;
+export abstract class AbstractModeFill<T extends IPathTransaction> {
+
+	private viewer: DrawViewer;
 	private tran: T;
 	private pathDrawer: PathDrawer;
 
 	constructor(
-		viewer: DrawchatViewer,
+		viewer: DrawViewer,
 		tran: T,
 		prop: EditorProperties
 	) {
@@ -122,8 +116,8 @@ export abstract class AbstractModeFill<T extends PathTransaction> implements Dra
 
 	backward(): void {
 		this.pathDrawer.pop();
-		let point: Point = this.pathDrawer.pop();
-		if (point != null) {
+		let point = this.pathDrawer.pop();
+		if (point === null) {
 			point = {
 				x: -100,
 				y: -100

@@ -1,9 +1,5 @@
 import * as drawchat from "@s2study/draw-api";
 
-import DrawchatModeChanger = drawchat.editor.DrawEditorModeChanger;
-import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
 import {Layers} from "./Layers";
 import {ModeEraser} from "./ModeEraser";
 import {EditorProperties} from "./EditorProperties";
@@ -15,7 +11,10 @@ import {ModeHandTool} from "./ModeHandTool";
 import {ModeEyedropper} from "./ModeEyedropper";
 import {ModeChanging} from "./ModeChanging";
 import {EditorEventDispatchers} from "./EditorEventDispatchers";
-export class Changer implements DrawchatModeChanger {
+import {Updater} from "@s2study/draw-updater/lib/Updator";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+import {DrawchatCanvas} from "./index";
+export class Changer {
 
 	private static EMPTY_CANVAS = new ModeChanging();
 
@@ -75,13 +74,13 @@ export class Changer implements DrawchatModeChanger {
 		return EYEDROPPER_MODE;
 	}
 
-	private updater: DrawchatUpdater;
+	private updater: Updater;
 
 	private layers: Layers;
 
 	private prop: EditorProperties;
 
-	private viewer: DrawchatViewer;
+	private viewer: DrawViewer;
 
 	private dispatcher: EditorEventDispatchers;
 
@@ -143,7 +142,7 @@ export class Changer implements DrawchatModeChanger {
 				});
 			case this.EYEDROPPER_MODE:
 				return this.layers.getCurrent()
-					.then((current) => {
+					.then((current: number) => {
 						return Promise.resolve(this.doChangeMode(this.EYEDROPPER_MODE, new ModeEyedropper(
 							current,
 							this.viewer,
@@ -172,7 +171,7 @@ export class Changer implements DrawchatModeChanger {
 		}
 	}
 
-	private doChangeMode(mode: number, canvas: DrawchatCanvas): DrawchatCanvas {
+	private doChangeMode(mode: number, canvas: DrawchatCanvas): DrawchatCanvas | null {
 		if (this.reservedMode !== mode) {
 			return null;
 		}

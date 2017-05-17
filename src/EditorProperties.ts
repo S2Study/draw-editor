@@ -1,9 +1,7 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatEditorProperties = drawchat.editor.DrawEditorProperties;
-import Color = drawchat.editor.Color;
 import {EditorEventDispatchers} from "./EditorEventDispatchers";
-export class EditorProperties implements DrawchatEditorProperties {
+import {Color} from "./index";
+import {ColorFactory} from "./Color";
+export class EditorProperties implements EditorProperties {
 
 	private dispatcher: EditorEventDispatchers;
 
@@ -70,7 +68,7 @@ export class EditorProperties implements DrawchatEditorProperties {
 	/**
 	 * フォントスタイル
 	 */
-	_fontStyle: string;
+	_fontStyle: string ;
 	get fontStyle(): string {
 		return this._fontStyle;
 	}
@@ -110,7 +108,7 @@ export class EditorProperties implements DrawchatEditorProperties {
 
 	constructor(
 		dispatcher: EditorEventDispatchers,
-		initProps?: DrawchatEditorProperties
+		initProps?: EditorProperties
 	) {
 		this.dispatcher = dispatcher;
 		if (initProps == null) {
@@ -128,54 +126,13 @@ export class EditorProperties implements DrawchatEditorProperties {
 	}
 
 	private setDefault() {
-		this._color = new ColorImpl();
+		this._color = ColorFactory.createInstance();
 		this._pathType = 0;
 		this._alpha = 1.0;
-		this._fontStyle = null;
+		this._fontStyle = "normal";
 		this._fontWeight = 400;
 		this._fontFamily = "sans-serif";
 		this._fontSize = 24;
 		this._thickness = 12;
 	}
 }
-class ColorImpl implements Color {
-	_r: number;
-	set r(val: number) {
-		this._r = ColorImpl.correctColor(val);
-	}
-
-	get r(): number {
-		return this._r;
-	}
-
-	_g: number;
-	set g(val: number) {
-		this._g = ColorImpl.correctColor(val);
-	}
-
-	get g(): number {
-		return this._g;
-	}
-
-	_b: number;
-	set b(val: number) {
-		this._b = ColorImpl.correctColor(val);
-	}
-
-	get b(): number {
-		return this._b;
-	}
-
-	constructor(r: number = 0,
-				g: number = 0,
-				b: number = 0) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
-	}
-
-	static correctColor(color: number) {
-		return !isNaN(color) || color < 0 ? 0 : (color > 255 ? 255 : color);
-	}
-}
-

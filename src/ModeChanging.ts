@@ -1,6 +1,5 @@
-import * as drawchat from "@s2study/draw-api";
+import {DrawchatCanvas} from "./index";
 
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
 export class ModeChanging implements DrawchatCanvas {
 
 	touchStart(x: number, y: number): void {

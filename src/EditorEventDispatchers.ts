@@ -1,6 +1,3 @@
-import * as api from "@s2study/draw-api";
-import DrawEditorProperties = api.editor.DrawEditorProperties;
-import ChangeProperties = api.editor.ChangeProperties;
 import * as emitter from "eventemitter3";
 import {
 	EVENT_CHANGE_PROPERTIES, EVENT_CHANGE_MODE, EVENT_CHANGE_CURRENT_LAYER,

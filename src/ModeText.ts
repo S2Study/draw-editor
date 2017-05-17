@@ -1,16 +1,16 @@
 import * as drawchat from "@s2study/draw-api";
 
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import TextTransaction = drawchat.updater.TextTransaction;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
 import {EditorProperties} from "./EditorProperties";
+import {DrawchatCanvas} from "./index";
+import {TextTransaction} from "@s2study/draw-updater/lib/TextTransaction";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
 export class ModeText implements DrawchatCanvas {
 
-	private viewer: DrawchatViewer;
+	private viewer: DrawViewer;
 	private tran: TextTransaction;
 	private prop: EditorProperties;
 
-	constructor(viewer: DrawchatViewer,
+	constructor(viewer: DrawViewer,
 				tran: TextTransaction,
 				prop: EditorProperties) {
 		this.viewer = viewer;
@@ -96,8 +96,7 @@ export class ModeText implements DrawchatCanvas {
 			this.tran.restoreSavePoint();
 			this.tran.setSize(this.prop.fontSize);
 			this.tran.setFontFamily(this.prop.fontFamily);
-			// this.tran.setStrokeColor(`rgb(${this.prop.color.r},${this.prop.color.g},${this.prop.color.b},${this.prop.alpha})`);
-			this.tran.setFill(`rgba(${this.prop.color.r},${this.prop.color.g},${this.prop.color.b},${this.prop.alpha})`);
+			this.tran.setFill(this.prop.color.getAlphaNumber(this.prop.alpha));
 			this.tran.setPosition(this.pointX, this.pointY);
 			this.tran.push(this.text);
 		} finally {

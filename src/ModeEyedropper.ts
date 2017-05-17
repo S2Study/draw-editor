@@ -1,17 +1,18 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
 import {EditorProperties} from "./EditorProperties";
+import {DrawchatCanvas} from "./index";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+
 export class ModeEyedropper implements DrawchatCanvas {
 
-	private viewer: DrawchatViewer;
+	private viewer: DrawViewer;
 	private prop: EditorProperties;
 	private layerIndex: number;
 
-	constructor(layerIndex: number,
-				viewer: DrawchatViewer,
-				prop: EditorProperties) {
+	constructor(
+		layerIndex: number,
+		viewer: DrawViewer,
+		prop: EditorProperties
+	) {
 		this.layerIndex = layerIndex;
 		this.viewer = viewer;
 		this.prop = prop;

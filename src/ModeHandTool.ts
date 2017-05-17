@@ -1,7 +1,6 @@
-import * as drawchat from "@s2study/draw-api";
+import {DrawchatCanvas} from "./index";
+import {TransformTransaction} from "@s2study/draw-updater/lib/TransformTransaction";
 
-import DrawchatCanvas = drawchat.editor.DrawEditorCanvas;
-import TransformTransaction = drawchat.updater.TransformTransaction;
 export class ModeHandTool implements DrawchatCanvas {
 
 	private tran: TransformTransaction;
@@ -12,8 +11,8 @@ export class ModeHandTool implements DrawchatCanvas {
 	}
 
 	private time: number;
-	sPointX: number;
-	sPointY: number;
+	sPointX: number | null;
+	sPointY: number | null;
 
 	private wPointX: number;
 	private wPointY: number;

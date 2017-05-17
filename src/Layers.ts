@@ -1,24 +1,21 @@
-import * as drawchat from "@s2study/draw-api";
-
-import DrawchatLayers = drawchat.editor.DrawEditorLayers;
-import DrawchatUpdater = drawchat.updater.DrawchatUpdater;
-import ChangeSequenceTransaction = drawchat.updater.ChangeSequenceTransaction;
-import DrawchatViewer = drawchat.viewer.DrawchatViewer;
-import DrawchatEditor = drawchat.editor.DrawEditor;
 import {EditorEventDispatchers} from "./EditorEventDispatchers";
-export class Layers implements DrawchatLayers {
+import {Updater} from "@s2study/draw-updater/lib/Updator";
+import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
+import {Editor} from "./Editor";
+import {ChangeSequenceTransaction} from "@s2study/draw-updater/lib/ChangeSequenceTransaction";
+export class Layers  {
 
-	updater: DrawchatUpdater;
-	viewer: DrawchatViewer;
-	editor: DrawchatEditor;
+	updater: Updater;
+	viewer: DrawViewer;
+	editor: Editor;
 	currentId: string;
 
 	private dispatcher: EditorEventDispatchers;
 
 	constructor(
-		updater: DrawchatUpdater,
-		viewer: DrawchatViewer,
-		editor: DrawchatEditor,
+		updater: Updater,
+		viewer: DrawViewer,
+		editor: Editor,
 		dispatcher: EditorEventDispatchers
 	) {
 		this.updater = updater;
@@ -114,9 +111,14 @@ export class Layers implements DrawchatLayers {
 	}
 
 	private getCurrentIndex(): number {
-		return this.updater.getLayers().findIndex((layerId: string) => {
-			return layerId === this.currentId;
-		});
+		const ids = this.updater.getLayers();
+		const len = ids.length | 0;
+		for (let i = 0 | 0; i < len; i = (i + 1) | 0) {
+			if (ids[i] === this.currentId) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -130,9 +132,7 @@ export class Layers implements DrawchatLayers {
 		lastIndex: number
 	): () => Promise<any> {
 		return () => {
-			return Promise.resolve(this.updater.getLayers().findIndex((layerId: string) => {
-				return layerId === this.currentId;
-			})).then((index: number) => {
+			return Promise.resolve(this.getCurrentIndex()).then((index: number) => {
 				if ( lastIndex !== index || lastCurrentId !== this.currentId) {
 					this.dispatcher.changeCurrentLayer.dispatch(index);
 				}
