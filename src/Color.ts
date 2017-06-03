@@ -66,4 +66,4 @@ export class ColorFactoryStatic {
 		);
 	}
 }
-export const ColorFactory: ColorFactoryStatic = new ColorFactoryStatic();
+	export const ColorFactory: ColorFactoryStatic = new ColorFactoryStatic();
