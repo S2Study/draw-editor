@@ -14,9 +14,9 @@ export class ModeBrush<T extends PathTransaction> {
 	private pathDrawer: BrushDrawer;
 	private prop: EditorProperties;
 
-	private static INPUT: PointBrushList = new PointBrushList(30);
-	private static GO_LIST: PointList = new PointList(31);
-	private static RE_LIST: PointList = new PointList(31);
+	private static INPUT: PointBrushList = new PointBrushList(50);
+	private static GO_LIST: PointList = new PointList(51);
+	private static RE_LIST: PointList = new PointList(51);
 
 	constructor(
 		viewer: DrawViewer,
@@ -244,13 +244,13 @@ export class ModeBrush<T extends PathTransaction> {
 		}
 
 		const thickness = during / d;
-		console.log(thickness);
+		// console.log(thickness);
 		return Math.max(Math.min(thickness, 2), 1 / 2) * this.prop.thickness;
 	}
 
 	protected setProperty(tran: PathTransaction): void {
 		tran.setFill(this.prop.color.getAlphaNumber(this.prop.alpha));
-		tran.setStrokeColor(0x00000000);
+		// tran.setStrokeColor(0x00000000);
 		// tran.setStrokeStyle(
 		// 	this.prop.thickness
 		// );

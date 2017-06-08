@@ -121,9 +121,9 @@ export class BrushDrawer {
 
 		this.putSame(now, BrushDrawer.rad(before, now));
 
-		console.log(this.input.toString());
-		console.log(this.goList.toString());
-		console.log(this.reList.toString());
+		// console.log(this.input.toString());
+		// console.log(this.goList.toString());
+		// console.log(this.reList.toString());
 
 		max = ( this.goList.size() - 1 ) | 0;
 		let point: Point = this.goList.item(0);
@@ -215,7 +215,7 @@ export class BrushDrawer {
 			now, goItem, rad, now.dis
 		);
 		const reItem = this.reList.push();
-		console.log("angle:" + rad * 180 / Math.PI);
+		// console.log("angle:" + rad * 180 / Math.PI);
 
 		BrushDrawer.translate(
 			now, reItem, rad + BrushDrawer.REVERSE, now.dis
