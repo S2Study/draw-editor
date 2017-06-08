@@ -6,4 +6,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var index_1 = require("./lib/index");
 __export(require("./lib/index"));
 exports.default = index_1.default;
+
 //# sourceMappingURL=index.js.map

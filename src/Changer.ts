@@ -12,6 +12,7 @@ import {EditorEventDispatchers} from "./EditorEventDispatchers";
 import {Updater} from "@s2study/draw-updater/lib/Updator";
 import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
 import {DrawchatCanvas} from "./index";
+import {ModeBrush} from "./ModeBrush";
 
 export class Changer {
 
@@ -29,6 +30,13 @@ export class Changer {
 	 */
 	get ERASER_MODE(): number {
 		return ERASER_MODE;
+	}
+
+	/**
+	 * 塗りツールを示す定数
+	 */
+	get BRUSH_MODE(): number {
+		return BRUSH_MODE;
 	}
 
 	/**
@@ -127,6 +135,10 @@ export class Changer {
 				return this.updater.beginPath(currentId).then((tran) => {
 					return this.doChangeMode(this.STROKE_MODE, new ModeStroke(this.viewer, tran, this.prop));
 				});
+			case this.BRUSH_MODE:
+				return this.updater.beginPath(currentId).then((tran) => {
+					return this.doChangeMode(this.BRUSH_MODE, new ModeBrush(this.viewer, tran, this.prop));
+				});
 			case this.CLIP_MODE:
 				return this.updater.beginClip(currentId).then((tran) => {
 					return this.doChangeMode(this.CLIP_MODE, new ModeClip(this.viewer, tran, this.prop));
@@ -193,3 +205,4 @@ const TEXT_MODE: number = 4;
 const TRANSFORM_MODE: number = 5;
 const EYEDROPPER_MODE: number = 6;
 const CHANGING: number = 7;
+const BRUSH_MODE: number = 8;

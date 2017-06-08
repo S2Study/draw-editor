@@ -147,7 +147,8 @@ var EditorRoot = (function (_super) {
         }
         _state.modeChangeFirst = false;
         var changer = _state.editor.mode;
-        changer.changeMode(changer.STROKE_MODE).then(function () {
+        changer.changeMode(changer.BRUSH_MODE).then(function () {
+            _state.editor.properties.thickness = 3;
             _this.refresh();
         });
         return true;

@@ -120,7 +120,8 @@ export class EditorRoot extends React.Component<EditorRootProps, EditorRootState
 
 		_state.modeChangeFirst = false;
 		const changer = _state.editor.mode;
-		changer.changeMode(changer.STROKE_MODE).then(() => {
+		changer.changeMode(changer.BRUSH_MODE).then(() => {
+			_state.editor.properties.thickness = 3;
 			this.refresh();
 		});
 		return true;
