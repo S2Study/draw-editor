@@ -97,6 +97,9 @@ var EditorMain = (function (_super) {
         state1.moving = false;
         var point = this.getOffset(element, event);
         this.props.editor.canvas.touchEnd(point.x, point.y);
+        this.props.editor.generateMessage().then(function (message) {
+            console.log(JSON.stringify(message.toJSON()));
+        });
     };
     EditorMain.prototype.componentWillMount = function () {
         var state1 = this.state;

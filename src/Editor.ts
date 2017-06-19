@@ -39,14 +39,20 @@ export class Editor {
 	private _dispatchers: EditorEventDispatchers;
 
 	constructor(
-		history: DrawHistory,
+		source: DrawHistory | Updater,
 		renderer: DrawchatRenderer,
 		properties?: EditorProperties
 	) {
-		this.history = history;
-		this.updater = updaters.createInstance(history);
+		if ((<Updater>source).history !== null && (<Updater>source).history !== undefined) {
+			this.updater = (<Updater>source);
+			this.history = this.updater.history;
+		} else {
+			this.history = <DrawHistory>source;
+			this.updater = updaters.createInstance(this.history);
+		}
+
 		this.renderer = renderer;
-		this.viewer = viewers.createInstance(history, renderer);
+		this.viewer = viewers.createInstance(this.history, renderer);
 		const emitter3 = new emitter.EventEmitter();
 		this._dispatchers = new EditorEventDispatchers(emitter3);
 		this.layers = new Layers(

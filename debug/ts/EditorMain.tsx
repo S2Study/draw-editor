@@ -105,6 +105,10 @@ export class EditorMain extends React.Component<EditorMainProps, EditorMainState
 		state1.moving = false;
 		let point = this.getOffset(element, event);
 		this.props.editor.canvas.touchEnd(point.x, point.y);
+
+		this.props.editor.generateMessage().then((message) => {
+			console.log(JSON.stringify(message.toJSON()));
+		});
 	}
 
 	componentWillMount(): void {
