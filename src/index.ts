@@ -4,12 +4,13 @@ import DrawHistory = drawchat.history.DrawHistory;
 import DrawchatRenderer = drawchat.renderer.DrawchatRenderer;
 import {Editor} from "./Editor";
 import {EditorProperties} from "./EditorProperties";
+import {Updater} from "@s2study/draw-updater/lib/Updator";
 
 export function createInstance(
-	history: DrawHistory,
+	source: DrawHistory | Updater,
 	renderer: DrawchatRenderer,
 	properties?: EditorProperties): Editor {
-	return new Editor(history, renderer, properties);
+	return new Editor(source, renderer, properties);
 }
 export default createInstance;
 
