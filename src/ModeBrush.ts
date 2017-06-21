@@ -6,8 +6,10 @@ import {PathTransaction} from "@s2study/draw-updater/lib/PathTransaction";
 import {DrawViewer} from "@s2study/draw-viewer/lib/DrawViewer";
 import {BrushDrawer} from "./BrushDrawer";
 import {PointBrushList, PointList} from "./PointArray";
+import {DrawchatCanvas} from "./index";
+import {DrawAPIUtils} from "@s2study/draw-api/lib/DrawAPIUtils";
 
-export class ModeBrush<T extends PathTransaction> {
+export class ModeBrush<T extends PathTransaction> implements DrawchatCanvas {
 
 	private viewer: DrawViewer;
 	private tran: T;
@@ -32,14 +34,14 @@ export class ModeBrush<T extends PathTransaction> {
 		);
 		this.lPointX = -100;
 		this.lPointY = -100;
-		this.force = null;
+		this.wForce = null;
 	}
 
 	private time: number;
-	private force: number | null;
 	lPointX: number;
 	lPointY: number;
 
+	private wForce: number | null;
 	private wPointX: number;
 	private wPointY: number;
 	private waiting: boolean;
@@ -47,7 +49,7 @@ export class ModeBrush<T extends PathTransaction> {
 	private commitReserve: boolean;
 	private started: boolean;
 
-	touchStart(x: number, y: number): void {
+	touchStart(x: number, y: number, force?: number | null ): void {
 
 		if (!this.tran.isAlive()) {
 			return;
@@ -59,13 +61,13 @@ export class ModeBrush<T extends PathTransaction> {
 		this.doStroke(
 			x,
 			y,
-			this.getDistance(x, y, x, y, 0, this.force)
+			this.getDistance(x, y, x, y, 0, DrawAPIUtils.complement(force, null))
 		);
 		this.time = Date.now();
 		this.started = true;
 	}
 
-	touchMove(x: number, y: number): void {
+	touchMove(x: number, y: number, force?: number | null): void {
 		if (!this.tran.isAlive()) {
 			return;
 		}
@@ -83,7 +85,7 @@ export class ModeBrush<T extends PathTransaction> {
 					this.lPointX,
 					this.lPointY,
 					this.time - latest,
-					this.force
+					DrawAPIUtils.complement(force, null)
 				)
 			);
 			return;
@@ -96,6 +98,7 @@ export class ModeBrush<T extends PathTransaction> {
 			this.time = latest;
 			this.wPointX = x;
 			this.wPointY = y;
+			this.wForce = DrawAPIUtils.complement(force, null);
 			this.setWait();
 			return;
 		}
@@ -109,12 +112,12 @@ export class ModeBrush<T extends PathTransaction> {
 				this.lPointX,
 				this.lPointY,
 				this.time - latest,
-				this.force
+				DrawAPIUtils.complement(force, null)
 			)
 		);
 	}
 
-	touchEnd(x: number, y: number): void {
+	touchEnd(x: number, y: number, force?: number | null): void {
 		if (!this.started) {
 			return;
 		}
@@ -140,7 +143,7 @@ export class ModeBrush<T extends PathTransaction> {
 				x,
 				y,
 				now - this.time,
-				this.force
+				DrawAPIUtils.complement(force, null)
 			)
 		);
 		this.time = now;
@@ -201,7 +204,7 @@ export class ModeBrush<T extends PathTransaction> {
 					this.wPointX,
 					this.wPointY,
 					during,
-					this.force
+					this.wForce
 				)
 			);
 			this.time = now;
@@ -234,8 +237,14 @@ export class ModeBrush<T extends PathTransaction> {
 		force: number | null
 	): number {
 		if (force !== null) {
-			return Math.min(Math.max(force, 2), 1 / 2) * this.prop.thickness;
+
+			let pow = 1 / ( 1 + Math.exp(-force * 5));
+			pow = Math.pow(3, pow * 2 - 1);
+			return isNaN(pow) ? this.prop.thickness : pow * this.prop.thickness;
+			// return ( force * 1.5 + 0.5 ) * this.prop.thickness;
+			// return Math.min(Math.max(force, 2), 1 / 2) * this.prop.thickness;
 		}
+
 		let disX = x1 - x2;
 		let disY = y1 - y2;
 		let d = Math.sqrt(disX * disX + disY * disY);

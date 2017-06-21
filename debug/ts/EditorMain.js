@@ -12,18 +12,11 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var styles = require("./EditorMainStyle.scss");
-// import {Editor} from "@s2study/draw-editor/lib/Editor";
-var Point = (function () {
-    function Point(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-    return Point;
-}());
-function EMPTY_FUNC(event) { }
+var TouchEventBinder_1 = require("./TouchEventBinder");
 var EditorMainState = (function () {
     function EditorMainState(editor) {
         this.editor = editor;
+        this.touchEventBinder = new TouchEventBinder_1.TouchEventBinder(editor);
     }
     return EditorMainState;
 }());
@@ -36,37 +29,11 @@ var EditorMain = (function (_super) {
         return _this;
     }
     EditorMain.prototype.componentDidMount = function () {
-        var _this = this;
         var state1 = this.state;
         state1.editor.reRender();
         state1.editor.start();
         var element = document.getElementById(this.props.id);
-        state1.mouseMove = function (event) {
-            if (!state1.click) {
-                return;
-            }
-            state1.moving = true;
-            var point = _this.getOffset(element, event);
-            _this.props.editor.canvas.touchMove(point.x, point.y);
-        };
-        state1.mouseDown = function (event) {
-            state1.click = true;
-            var point = _this.getOffset(element, event);
-            _this.props.editor.canvas.touchStart(point.x, point.y);
-        };
-        state1.mouseUp = function (event) {
-            _this.drop(element, event);
-        };
-        state1.mouseOut = function (event) {
-            if (!_this.state.moving) {
-                return;
-            }
-            _this.drop(element, event);
-        };
-        element.addEventListener("mousemove", this.state.mouseMove);
-        element.addEventListener("mousedown", this.state.mouseDown);
-        document.addEventListener("mouseup", this.state.mouseUp);
-        element.addEventListener("mouseout", this.state.mouseOut);
+        state1.touchEventBinder.bind(element);
     };
     EditorMain.prototype.getCursor = function () {
         var mode = this.state.editor.mode;
@@ -91,38 +58,10 @@ var EditorMain = (function (_super) {
                 return "auto";
         }
     };
-    EditorMain.prototype.drop = function (element, event) {
-        var state1 = this.state;
-        state1.click = false;
-        state1.moving = false;
-        var point = this.getOffset(element, event);
-        this.props.editor.canvas.touchEnd(point.x, point.y);
-        this.props.editor.generateMessage().then(function (message) {
-            console.log(JSON.stringify(message.toJSON()));
-        });
-    };
     EditorMain.prototype.componentWillMount = function () {
         var state1 = this.state;
         state1.editor.stop();
-        var element = document.getElementById(this.props.id);
-        if (element == null) {
-            return;
-        }
-        element.removeEventListener("mousemove", state1.mouseMove);
-        element.removeEventListener("mousedown", state1.mouseDown);
-        document.removeEventListener("mouseup", state1.mouseUp);
-        element.removeEventListener("mouseout", state1.mouseOut);
-        state1.mouseMove = EMPTY_FUNC;
-        state1.mouseDown = EMPTY_FUNC;
-        state1.mouseUp = EMPTY_FUNC;
-    };
-    EditorMain.prototype.getOffset = function (element, event) {
-        var mouseX = event.pageX;
-        var mouseY = event.pageY;
-        var rect = element.getBoundingClientRect();
-        var positionX = rect.left + window.pageXOffset;
-        var positionY = rect.top + window.pageYOffset;
-        return new Point(mouseX - positionX, mouseY - positionY);
+        state1.touchEventBinder.unBind();
     };
     EditorMain.prototype.render = function () {
         var style = {

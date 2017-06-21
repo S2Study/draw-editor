@@ -15,9 +15,9 @@ export function createInstance(
 export default createInstance;
 
 export interface DrawchatCanvas {
-	touchStart(x: number, y: number): void;
-	touchMove(x: number, y: number): void;
-	touchEnd(x: number, y: number): void;
+	touchStart(x: number, y: number, force?: number | null): void;
+	touchMove(x: number, y: number, force?: number | null): void;
+	touchEnd(x: number, y: number, force?: number | null): void;
 	setText(text: string): void;
 	backward(): void;
 }
@@ -127,119 +127,6 @@ export interface DrawEditorEventListeners {
 	 */
 	readonly update: Update;
 }
-
-// export interface DrawEditorModeChanger {
-//
-// 	/**
-// 	 * モードチェンジ中
-// 	 */
-// 	readonly CHANGING: number;
-//
-// 	/**
-// 	 * 消しゴムツールを示す定数
-// 	 */
-// 	readonly ERASER_MODE: number;
-//
-// 	/**
-// 	 * 塗りツールを示す定数
-// 	 */
-// 	readonly FILL_MODE: number;
-//
-// 	/**
-// 	 * 線ツールを示す定数
-// 	 */
-// 	readonly STROKE_MODE: number;
-//
-// 	/**
-// 	 * クリップツールを示す定数
-// 	 */
-// 	readonly CLIP_MODE: number;
-//
-// 	/**
-// 	 * テキストツールを示す定数
-// 	 */
-// 	readonly TEXT_MODE: number;
-//
-// 	/**
-// 	 * 手のひらツールを示す定数
-// 	 */
-// 	readonly HAND_TOOL_MODE: number;
-//
-// 	/**
-// 	 * スポイトツールを示す定数
-// 	 */
-// 	readonly EYEDROPPER_MODE: number;
-//
-// 	/**
-// 	 * 現在のモードを取得する。
-// 	 */
-// 	getMode(): number;
-//
-// 	/**
-// 	 * モード変更
-// 	 */
-// 	changeMode(mode: number): Promise<any>;
-//
-// 	isAliveMode(mode: Number): boolean;
-// }
-//
-// export interface DrawEditorLayers {
-//
-// 	/**
-// 	 * レイヤー数
-// 	 */
-// 	layerCount(): Promise<number>;
-//
-// 	/**
-// 	 * レイヤー切り替え
-// 	 * @param index
-// 	 */
-// 	setCurrent(index: number): Promise<any>;
-//
-// 	/**
-// 	 * 現在レイヤー
-// 	 */
-// 	getCurrent(): Promise<number>;
-//
-// 	/**
-// 	 * 指定レイヤーの表示
-// 	 * @param index
-// 	 */
-// 	show(index: number): void;
-//
-// 	/**
-// 	 * 指定レイヤーの非表示
-// 	 * @param index
-// 	 */
-// 	hide(index: number): void;
-//
-// 	/**
-// 	 * レイヤー全非表示
-// 	 */
-// 	hideAll(): void;
-//
-// 	/**
-// 	 * レイヤーの全表示
-// 	 */
-// 	showAll(): void;
-//
-// 	/**
-// 	 * レイヤーの削除
-// 	 * @param index
-// 	 */
-// 	remove(index: number): Promise<any>;
-//
-// 	/**
-// 	 *  レイヤーの追加
-// 	 */
-// 	addLayer(): Promise<any>;
-//
-// 	/**
-// 	 * レイヤーの順序移動
-// 	 * @param index
-// 	 */
-// 	moveTo(index: number): Promise<any>;
-// }
 
 export interface DrawEditorCanvas {
 
