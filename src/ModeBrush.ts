@@ -20,6 +20,9 @@ export class ModeBrush<T extends PathTransaction> implements DrawchatCanvas {
 	private static GO_LIST: PointList = new PointList(51);
 	private static RE_LIST: PointList = new PointList(51);
 
+	private static LatestForce: number | null = null;
+	private static ForceEnable: boolean = false;
+
 	constructor(
 		viewer: DrawViewer,
 		tran: T,
@@ -126,27 +129,7 @@ export class ModeBrush<T extends PathTransaction> implements DrawchatCanvas {
 			return;
 		}
 		this.checkLastAccess();
-		if (this.lPointX === x && this.lPointY === y) {
-			this.setCommitProperty(this.tran);
-			this.tran.commit(true);
-			this.pathDrawer.clear();
-			return;
-		}
-
-		let now = Date.now();
-		this.doStroke(
-			x,
-			y,
-			this.getDistance(
-				this.lPointX,
-				this.lPointY,
-				x,
-				y,
-				now - this.time,
-				DrawAPIUtils.complement(force, null)
-			)
-		);
-		this.time = now;
+		this.time = Date.now();
 
 		this.setCommitProperty(this.tran);
 		this.tran.commit(true);
@@ -236,7 +219,20 @@ export class ModeBrush<T extends PathTransaction> implements DrawchatCanvas {
 		during: number,
 		force: number | null
 	): number {
-		if (force !== null) {
+
+		if (force !== null && ModeBrush.ForceEnable === false) {
+			if (
+				ModeBrush.ForceEnable === false
+				&&	ModeBrush.LatestForce !== null
+				&&	ModeBrush.LatestForce !== force
+			) {
+				ModeBrush.ForceEnable = true;
+			} else {
+				ModeBrush.LatestForce = force;
+			}
+		}
+
+		if (ModeBrush.ForceEnable && force !== null) {
 
 			let pow = 1 / ( 1 + Math.exp(-force * 5));
 			pow = Math.pow(3, pow * 2 - 1);
