@@ -1,10 +1,13 @@
 import * as React from "react";
 import * as styles from "./CanvasContainerStyle.scss";
 import {Editor} from "../../src/Editor";
+import {CSSProperties} from "react";
 
 export interface CanvasContainerProps {
 	id: string;
 	editor: Editor;
+	dx: number;
+	dy: number;
 }
 
 export class CanvasContainer extends React.Component<CanvasContainerProps, any> {
@@ -14,14 +17,16 @@ export class CanvasContainer extends React.Component<CanvasContainerProps, any> 
 
 	render() {
 		let style = {
-			width: this.props.editor.getWidth(),
-			height: this.props.editor.getHeight()
-		};
+			position: "absolute",
+			top: `${this.props.dx}px`,
+			left: `${this.props.dy}px`,
+			width: `${this.props.editor.getWidth()}px`,
+			height: `${this.props.editor.getHeight()}px`
+		} as CSSProperties;
 		return (
 			<div className={styles.container}>
-				<div style={style} className={styles.container__background}>
-					<div style={style} id={this.props.id} className={styles.container__canvas}/>
-				</div>
+				<div style={style} className={styles.container__background} />
+				<div id={this.props.id} className={styles.container__canvas}/>
 			</div>
 		);
 	}

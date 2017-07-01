@@ -1,6 +1,6 @@
 {
   "name": "@s2study/draw-editor",
-  "version": "1.0.0-beta.13",
+  "version": "1.0.0-beta.14",
   "description": "drawchat編集ライブラリ",
   "main": "index.js",
   "scripts": {
@@ -48,7 +48,7 @@
     "postcss-cssnext": "^2.11.0",
     "postcss-loader": "^2.0.5",
     "power-assert": "^1.4.2",
-    "precss": "^1.4.0",
+    "precss": "^2.0.0",
     "process": "^0.11.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -63,7 +63,7 @@
     "tslint": "^5.2.0",
     "typedoc": "^0.7.0",
     "typescript": "^2.3.2",
-    "webpack": "^2.6.1"
+    "webpack": "^3.0.0"
   },
   "dependencies": {
     "@s2study/draw-api": "beta",

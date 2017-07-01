@@ -65,13 +65,15 @@ var EditorMain = (function (_super) {
     };
     EditorMain.prototype.render = function () {
         var style = {
-            width: this.props.editor.getWidth(),
-            height: this.props.editor.getHeight(),
-            cursor: this.getCursor()
+            position: "absolute",
+            top: this.props.dx + "px",
+            left: this.props.dy + "px",
+            width: this.props.editor.getWidth() + "px",
+            height: this.props.editor.getHeight() + "px",
         };
         return (React.createElement("div", { className: styles.container },
             React.createElement("div", { style: style, className: styles.container__background },
-                React.createElement("div", { style: style, id: this.props.id, className: styles.container__canvas }))));
+                React.createElement("div", { id: this.props.id, className: styles.container__canvas }))));
     };
     return EditorMain;
 }(React.Component));

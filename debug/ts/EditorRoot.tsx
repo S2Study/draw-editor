@@ -20,8 +20,10 @@ export class EditorRootState {
 	modeChangeFirst: boolean = true;
 	canvasId: string;
 
-	constructor(editor: Editor,
-				canvasId: string) {
+	constructor(
+		editor: Editor,
+		canvasId: string
+	) {
 		this.editor = editor;
 		this.canvasId = canvasId;
 		this.latest = -1;
@@ -60,8 +62,10 @@ export class EditorRoot extends React.Component<EditorRootProps, EditorRootState
 
 		const renderer: DrawchatRenderer = Renderer.createDOMRenderer(
 			canvasId,
-			props.canvasWidth == null ? 600 : props.canvasWidth,
-			props.canvasHeight == null ? 400 : props.canvasHeight
+			props.canvasWidth == null ? 1000 : props.canvasWidth,
+			props.canvasHeight == null ? 800 : props.canvasHeight,
+			200,
+			200
 		) as DrawchatRenderer;
 
 		this.state = new EditorRootState(editors.createInstance(
@@ -164,12 +168,15 @@ export class EditorRoot extends React.Component<EditorRootProps, EditorRootState
 
 		const _state: EditorRootState = this.state;
 		return (
-			<div className={styles.container}>
+			<div style={{
+				width: 1000,
+				height: 800
+			}} className={styles.container}>
 				<div className={styles.canvasContainer}>
-					<CanvasContainer id={_state.canvasId} editor={_state.editor}/>
+					<CanvasContainer id={_state.canvasId} editor={_state.editor} dx={200} dy={200} />
 				</div>
 				<div className={styles.canvasContainer}>
-					<EditorMain id={_state.canvasId + "_eventLayer"} editor={_state.editor}/>
+					<EditorMain id={_state.canvasId + "_eventLayer"} editor={_state.editor} dx={200} dy={200} />
 				</div>
 			</div>
 		);

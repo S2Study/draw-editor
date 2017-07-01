@@ -144,13 +144,13 @@ export class TouchEventBinder {
 	bind(element: Element) {
 		this.element = element;
 
-		element.addEventListener("mousemove", this.mouseMove);
+		document.addEventListener("mousemove", this.mouseMove);
 		element.addEventListener("mousedown", this.mouseDown);
 		document.addEventListener("mouseup", this.mouseUp, true);
-		element.addEventListener("mouseout", this.mouseOut);
+		// element.addEventListener("mouseout", this.mouseOut);
 
 		element.addEventListener("touchstart", this.touchStart);
-		element.addEventListener("touchmove", this.touchMove);
+		document.addEventListener("touchmove", this.touchMove);
 		document.addEventListener("touchend", this.touchEnd, true);
 		document.addEventListener("touchcancel", this.touchEnd, true);
 	}
@@ -163,13 +163,13 @@ export class TouchEventBinder {
 		const element = this.element;
 		this.element = null;
 
-		element.removeEventListener("mousemove", this.mouseMove);
+		document.removeEventListener("mousemove", this.mouseMove);
 		element.removeEventListener("mousedown", this.mouseDown);
 		document.removeEventListener("mouseup", this.mouseUp, true);
-		element.removeEventListener("mouseout", this.mouseOut);
+		// element.removeEventListener("mouseout", this.mouseOut);
 
 		element.removeEventListener("touchstart", this.touchStart);
-		element.removeEventListener("touchmove", this.touchMove);
+		document.removeEventListener("touchmove", this.touchMove);
 		document.removeEventListener("touchend", this.touchEnd, true);
 		document.removeEventListener("touchcancel", this.touchEnd, true);
 	}

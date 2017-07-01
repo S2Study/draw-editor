@@ -2,6 +2,7 @@ import * as React from "react";
 import * as styles from "./EditorMainStyle.scss";
 import {Editor} from "../../src/Editor";
 import {TouchEventBinder} from "./TouchEventBinder";
+import {CSSProperties} from "react";
 
 export class EditorMainState {
 	click: boolean;
@@ -17,6 +18,8 @@ export class EditorMainState {
 
 export interface EditorMainProps {
 	id: string;
+	dx: number;
+	dy: number;
 	editor: Editor;
 }
 
@@ -69,14 +72,17 @@ export class EditorMain extends React.Component<EditorMainProps, EditorMainState
 
 	render() {
 		let style = {
-			width: this.props.editor.getWidth(),
-			height: this.props.editor.getHeight(),
-			cursor: this.getCursor()
-		};
+			position: "absolute",
+			top: `${this.props.dx}px`,
+			left: `${this.props.dy}px`,
+			width: `${this.props.editor.getWidth()}px`,
+			height: `${this.props.editor.getHeight()}px`,
+			// cursor: this.getCursor()
+		} as CSSProperties;
 		return (
 			<div className={styles.container}>
 				<div style={style} className={styles.container__background}>
-					<div style={style} id={this.props.id} className={styles.container__canvas}/>
+					<div id={this.props.id} className={styles.container__canvas}/>
 				</div>
 			</div>
 		);

@@ -85,7 +85,7 @@ var EditorRoot = (function (_super) {
     function EditorRoot(props) {
         var _this = _super.call(this, props) || this;
         var canvasId = props.canvasElement == null ? "editorCanvas" : props.canvasElement;
-        var renderer = draw_canvas2d_renderer_1.default.createDOMRenderer(canvasId, props.canvasWidth == null ? 600 : props.canvasWidth, props.canvasHeight == null ? 400 : props.canvasHeight);
+        var renderer = draw_canvas2d_renderer_1.default.createDOMRenderer(canvasId, props.canvasWidth == null ? 1000 : props.canvasWidth, props.canvasHeight == null ? 800 : props.canvasHeight, 200, 200);
         _this.state = new EditorRootState(editors.createInstance(props.history, renderer), canvasId);
         return _this;
     }
@@ -186,11 +186,14 @@ var EditorRoot = (function (_super) {
     // }
     EditorRoot.prototype.render = function () {
         var _state = this.state;
-        return (React.createElement("div", { className: styles.container },
+        return (React.createElement("div", { style: {
+                width: 1000,
+                height: 800
+            }, className: styles.container },
             React.createElement("div", { className: styles.canvasContainer },
-                React.createElement(CanvasContainer_1.CanvasContainer, { id: _state.canvasId, editor: _state.editor })),
+                React.createElement(CanvasContainer_1.CanvasContainer, { id: _state.canvasId, editor: _state.editor, dx: 200, dy: 200 })),
             React.createElement("div", { className: styles.canvasContainer },
-                React.createElement(EditorMain_1.EditorMain, { id: _state.canvasId + "_eventLayer", editor: _state.editor }))));
+                React.createElement(EditorMain_1.EditorMain, { id: _state.canvasId + "_eventLayer", editor: _state.editor, dx: 200, dy: 200 }))));
     };
     return EditorRoot;
 }(React.Component));
