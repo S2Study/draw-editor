@@ -1,6 +1,7 @@
 import {EditorEventDispatchers} from "./EditorEventDispatchers";
 import {Color} from "./index";
 import {ColorFactory} from "./Color";
+
 export class EditorProperties implements EditorProperties {
 
 	private dispatcher: EditorEventDispatchers;
@@ -106,6 +107,12 @@ export class EditorProperties implements EditorProperties {
 		this.dispatcher.changeProperties.dispatch(this);
 	}
 
+	/**
+	 * パス設定の精度。mouseMove時の距離判定で利用する。
+	 * 1が初期値 これより高ければ短い距離でもプロットする。
+	 */
+	accuracy: number;
+
 	constructor(
 		dispatcher: EditorEventDispatchers,
 		initProps?: EditorProperties
@@ -123,6 +130,7 @@ export class EditorProperties implements EditorProperties {
 		this._fontFamily = initProps.fontFamily;
 		this._fontSize = initProps.fontSize;
 		this._thickness = initProps.thickness;
+		this.accuracy = initProps.accuracy;
 	}
 
 	private setDefault() {
@@ -134,5 +142,6 @@ export class EditorProperties implements EditorProperties {
 		this._fontFamily = "sans-serif";
 		this._fontSize = 24;
 		this._thickness = 12;
+		this.accuracy = 1;
 	}
 }

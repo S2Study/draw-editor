@@ -1,6 +1,6 @@
 {
   "name": "@s2study/draw-editor",
-  "version": "1.0.0-beta.14",
+  "version": "1.0.0-beta.15",
   "description": "drawchat編集ライブラリ",
   "main": "index.js",
   "scripts": {

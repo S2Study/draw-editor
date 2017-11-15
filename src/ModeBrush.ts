@@ -96,7 +96,7 @@ export class ModeBrush<T extends PathTransaction> implements DrawchatCanvas {
 		let x1 = x - this.lPointX;
 		let y1 = y - this.lPointY;
 
-		let d = Math.sqrt(x1 * x1 + y1 * y1);
+		let d = Math.sqrt(x1 * x1 + y1 * y1) * this.prop.accuracy;
 		if (d < 50) {
 			this.time = latest;
 			this.wPointX = x;
